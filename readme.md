@@ -31,7 +31,7 @@ Node unavailability:
 * A node is drained or shut down.
 
 Network delay/loss:
-* A time delay is injected, for example between the service writing data to a database. 
+* A time delay is injected, for example between the service writing data to a database (in this article we won't be dicussing this, since it requires sudo/root access on all the cluster nodes, which is something I'll do in a later series of articles.)
 
 Resource exhaustion:
 * A high CPU or memory load is simulated.
@@ -41,7 +41,15 @@ Service crash:
 
 <br>
 
-## Requirements to follow the guide
+## Requirements to follow the guide:
+
+1. A working Kubernetes cluster with at least 3 nodes (physical in my case, but can be virtual; I operate all my nodes in a headless manner.)
+2. On the development machine, kubectl must be configured to access the Kubernetes cluster. I'm using a Windows machine as the development system, so Git is required to run the chaos testing scripts.
+3. For this article, I've been using a set of microservices - a gateway, a service that writes data to a database, and an user interface (UI) service. There is no decoupling between the services, and they communicate with each other using HTTP. The code and YAML files for them are uploaded in this repository.
+4. To simulate the requests, I'm using Locust. The file is shared in this repository.
+5. Since this is a Linux environment, the user needs to have knowledge of how to check CPU and memory usage, pod counts (all the basic Kubernetes commands,) and able to understand errors which they can troubleshoot.
+
+<br>
 
 ## Brief introduction to auto scaling
 
