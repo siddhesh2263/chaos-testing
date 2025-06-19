@@ -1,0 +1,5 @@
+CREATE TABLE sensor_data (
+    id SERIAL PRIMARY KEY,
+    value INTEGER,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
