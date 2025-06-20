@@ -81,7 +81,7 @@ A sudden surge in traffic will cause queue backlogs in the gateway, and will lea
 
 ## Running different scenarios
 
-We will look at one case which has a combination of multiple faults taking place one after another. The total script run time is close to 8 minutes. Given this time, I ran Locust for around 10 minutes. Below is the workflow of the chaos scenario:
+We will look at one case which has a combination of multiple faults taking place one after another. The total script run time is close to `8 minutes`. Given this time, I ran Locust for around `10 minutes`. Below is the workflow of the chaos scenario:
 
 <br>
 
@@ -104,6 +104,36 @@ We will look at one case which has a combination of multiple faults taking place
 
 `Scale Gateway Down to 2 Replicas` reduces replicas to check clean scale-down and service continuity.
 
-## Conclusion
+<br>
 
-## Future work.
+![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/chaos-script-output.png?raw=true)
+
+## Observations
+
+Below image shows the reason for request failures. The error points to an application level crash or error, and is not a cluster problem. These errors are HTTP 500s, indicating that the gateway service was reachable but failed to process the requests - likely due to a dependency failure or application error.
+
+![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/all-failure-reason.png?raw=true)
+
+<br>
+
+Recall that we drained a node in the first stage. We can see on the `Lens` application (which is used to view Kubernetes related setup) that one of the nodes is disabled:
+
+![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/node-drain.png?raw=true)
+
+<br>
+
+Let's move on to the Locust report. It shows a grim picture - the system is not just failing, but it's struggling under load, and is taking a long time to respond before the HTTP 500 errors are returned. There can be many causes for it:
+* Slow writes to the database could back up the entire gateway request flow,
+* The Flask services are run on development configuration, and not Gunicorn. This means it's working as a single threaded application, and without the presence of workers or sync mode, it will queue up requests.
+* The biggest problem could be the absence of timeout handling or retry logic in the application. If the request that's taking too long is stuck, it will result in a timeout, and as the client sees a slow HTTP 500 error, Locust logs it as a failure.
+
+![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/charts-locust-report.png?raw=true)
+
+<br>
+
+Once the chaos testing reaches the last stage, the node is uncordoned. The below image shows that the node is up again:
+
+![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/system-online.png?raw=true)
+
+
+## Future work
