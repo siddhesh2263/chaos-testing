@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Set your node and app labels
+# Set node and app labels
 NODE_NAME="optiPlex-3070"
 APP_LABEL_GATEWAY="app=gateway"
 APP_LABEL_UI="app=ui"

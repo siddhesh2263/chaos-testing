@@ -4,6 +4,26 @@
 
 <br>
 
+# Table of Contents
+
+- [Chaos Testing on a K3s (Kubernetes) Cluster](#chaos-testing-on-a-k3s-kubernetes-cluster)
+- [What is chaos testing?](#what-is-chaos-testing)
+- [Key characteristics of chaos testing](#key-characteristics-of-chaos-testing)
+- [Examples of chaos experiments](#examples-of-chaos-experiments)
+- [Requirements to follow the guide](#requirements-to-follow-the-guide)
+- [Brief introduction to auto scaling](#brief-introduction-to-auto-scaling)
+  - [How does it relate to chaos testing?](#how-does-it-relate-to-chaos-testing)
+  - [Scenario 1 - Kill a pod mid-request](#scenario-1---kill-a-pod-mid-request)
+  - [Scenario 2 - Drain a node during high load](#scenario-2---drain-a-node-during-high-load)
+  - [Scenario 3 - Injection of high CPU/memory pressure](#scenario-3---injection-of-high-cpumemory-pressure)
+  - [Scenario 4 - Sudden surge in traffic](#scenario-4---sudden-surge-in-traffic)
+- [Running different scenarios](#running-different-scenarios)
+- [Observations](#observations)
+- [Problem with simulating requests with Locust](#problem-with-simulating-requests-with-locust)
+- [Future work](#future-work)
+
+<br>
+
 ## What is chaos testing?
 
 Chaos testing is the practice of deliberately injecting failures into a system to observe how it behaves under stress or partial outage. The goal is to identify weaknesses in the system and its recovery mechanisms — before real-world failures occur. Chaos testing helps surface hidden assumptions, brittle dependencies, and unmonitored failure modes.
@@ -139,5 +159,14 @@ Once the chaos testing reaches the last stage, the node is uncordoned. The below
 
 ![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/system-online.png?raw=true)
 
+<br>
+
+### Problem with simulating requests with Locust:
+
+I couldn't simulate a large number of users using Locust from a single machine due to hardware and concurrency limitations. Locust is Python-based and constrained by the Global Interpreter Lock (GIL), so a single CPU core can only handle a limited number of concurrent users. As the load increases, the machine quickly hits CPU and socket limits, causing the client itself to become a bottleneck before the backend is stressed. This leads to inaccurate results, high failure rates, and poor scalability. To generate meaningful load, a distributed Locust setup across multiple machines is required.
+
+<br>
 
 ## Future work
+
+As a next step, the focus will be on automating the chaos scenarios into repeatable scripts with better control over timing and sequence. This includes tagging logs and Grafana dashboards to correlate system behavior with failure injection points. Success criteria for recovery — such as acceptable downtime, replica health, and data loss thresholds — will be defined and validated automatically after each run. Prometheus alert rules will be added to detect failure spikes, CrashLoops, or unresponsive autoscaling. The system will be scaled under higher RPS using Locust to observe limits under real-world-like traffic. Although latency injection was skipped due to permission constraints, network fault simulation will be revisited in the future. Long-term, adoption of chaos engineering platforms like Litmus or Chaos Mesh may be considered for more structured fault orchestration and resilience validation.
