@@ -81,11 +81,28 @@ A sudden surge in traffic will cause queue backlogs in the gateway, and will lea
 
 ## Running different scenarios
 
-![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/locust-snapshot.png?raw=true)
+We will look at one case which has a combination of multiple faults taking place one after another. The total script run time is close to 8 minutes. Given this time, I ran Locust for around 10 minutes. Below is the workflow of the chaos scenario:
 
 <br>
 
 ![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/script-flow-image.png?raw=true)
+
+
+`Drain Node` temporarily removes a node from the cluster to test if workloads reschedule correctly.
+
+`Delete Gateway Pod` simulates a sudden API service failure and ensures it's replaced by Kubernetes.
+
+`Induce CrashLoop on Gateway` forces the gateway into a broken state to test failure detection and rollback procedures.
+
+`Delete UI Pod` simulates frontend outage and tests recovery behavior for user-facing components.
+
+`Scale Gateway to 10 Replicas` manually scales the gateway to test resource utilization and autoscaling behavior.
+
+`Undo CrashLoop (Rollout Undo)` restores the broken gateway deployment to verify rollback and health restoration.
+
+`Uncordon Node` brings the drained node back into the cluster to test node reintegration.
+
+`Scale Gateway Down to 2 Replicas` reduces replicas to check clean scale-down and service continuity.
 
 ## Conclusion
 
