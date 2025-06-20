@@ -63,7 +63,21 @@ We used YAML files to run our application on the Kubernetes cluster. Along with 
 
 ### How does it relate to chaos testing?
 
+A combination of failures introduced by chaos testing, and a load of requests sent by Locust will generate stress on the system. Auto scaling responds to this stress, and provides us the details if the system can scale up fast enough to handle increased demand or resourc strain. Let's look at it in more detail:
 
+### Scenario 1 - Kill a pod mid-request
+When a pod goes down, the other services retry logic and overall fault tolerance of the system will be tested. In the meantime, HPA or the deployment tries to create a new pod.
+
+### Scenario 2 - Drain a node during high load:
+When this happens, the system's service availability will be checked. HPA may or may not be involved too much in this, since the node will be deemed unavailable, Kubernetes will try to host the pods on other nodes.
+
+### Scenario 3 - Injection of high CPU/memory pressure:
+The degradation in the application will be visible, and HPA in this case should be able to scale out the pods.
+
+### Scenario 4 - Sudden surge in traffic:
+A sudden surge in traffic will cause queue backlogs in the gateway, and will lead to an increase in response time. If thresholds are crossed in this scenario, HPA should increase replicas.
+
+<br>
 
 ## Running different scenarios
 
