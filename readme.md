@@ -83,6 +83,10 @@ A sudden surge in traffic will cause queue backlogs in the gateway, and will lea
 
 ![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/locust-snapshot.png?raw=true)
 
+<br>
+
+![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/script-flow-image.png?raw=true)
+
 ## Conclusion
 
 ## Future work.
