@@ -1,5 +1,9 @@
 # Chaos Testing on a K3s (Kubernetes) Cluster
 
+![alt text](https://github.com/siddhesh2263/chaos-testing/blob/main/assets/merged-logos.png?raw=true)
+
+<br>
+
 ## What is chaos testing?
 
 Chaos testing is the practice of deliberately injecting failures into a system to observe how it behaves under stress or partial outage. The goal is to identify weaknesses in the system and its recovery mechanisms — before real-world failures occur. Chaos testing helps surface hidden assumptions, brittle dependencies, and unmonitored failure modes.
