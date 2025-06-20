@@ -6,7 +6,6 @@
 
 # Table of Contents
 
-- [Chaos Testing on a K3s (Kubernetes) Cluster](#chaos-testing-on-a-k3s-kubernetes-cluster)
 - [What is chaos testing?](#what-is-chaos-testing)
 - [Key characteristics of chaos testing](#key-characteristics-of-chaos-testing)
 - [Examples of chaos experiments](#examples-of-chaos-experiments)
@@ -42,7 +41,7 @@ Scenarios can be replayed to verify fixes.
 Metrics, logs, and alerts are used to assess system behaviour and overall impact.
 
 ### Incremental:
-We can start with small faults, and then expans to compound failures.
+We can start with small faults, and then expand to compound failures.
 
 <br>
 
